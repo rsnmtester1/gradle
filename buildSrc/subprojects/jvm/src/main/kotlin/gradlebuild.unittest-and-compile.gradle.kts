@@ -120,7 +120,7 @@ fun addDependencies() {
     dependencies {
         testCompileOnly(libs.junit)
         testRuntimeOnly(libs.junit5Vintage)
-        testImplementation(libs.groovy)
+//        testImplementation(libs.groovy)
         testImplementation(libs.spock)
         testRuntimeOnly(libs.bytebuddy)
         testRuntimeOnly(libs.objenesis)
@@ -137,9 +137,7 @@ fun addDependencies() {
         }
 
         val astTransformation by configurations.creating
-        dependencies {
-            astTransformation(libs.groovy)
-        }
+        astTransformation("org.gradle.groovy:groovy-all:1.3-${libs.groovyVersion}")
     }
 }
 
