@@ -45,6 +45,7 @@ import org.gradle.internal.execution.TestExecutionHistoryStore
 import org.gradle.internal.execution.history.OutputFilesRepository
 import org.gradle.internal.execution.history.changes.DefaultExecutionStateChangeDetector
 import org.gradle.internal.execution.history.impl.DefaultOverlappingOutputDetector
+import org.gradle.internal.execution.impl.DefaultInputFingerprinter
 import org.gradle.internal.execution.timeout.TimeoutHandler
 import org.gradle.internal.fingerprint.AbsolutePathInputNormalizer
 import org.gradle.internal.fingerprint.FileCollectionFingerprinter
@@ -78,6 +79,7 @@ class DefaultTransformerInvocationFactoryTest extends AbstractProjectBuilderSpec
         getClassLoaderHash(_ as ClassLoader) >> HashCode.fromInt(1234)
     }
     def valueSnapshotter = new DefaultValueSnapshotter(classloaderHasher, null)
+    def inputFingerprinter = new DefaultInputFingerprinter(valueSnapshotter)
 
     def executionHistoryStore = new TestExecutionHistoryStore()
     def fileSystemAccess = TestFiles.fileSystemAccess()
@@ -130,8 +132,10 @@ class DefaultTransformerInvocationFactoryTest extends AbstractProjectBuilderSpec
         buildOperationExecutor,
         new GradleEnterprisePluginManager(),
         classloaderHasher,
+        new CurrentBuildOperationRef(),
         deleter,
         new DefaultExecutionStateChangeDetector(),
+        inputFingerprinter,
         outputChangeListener,
         outputFilesRepository,
         outputSnapshotter,
@@ -142,9 +146,7 @@ class DefaultTransformerInvocationFactoryTest extends AbstractProjectBuilderSpec
                 .willBeRemovedInGradle7()
                 .undocumented()
                 .nagUser()
-        },
-        valueSnapshotter,
-        new CurrentBuildOperationRef()
+        }
     )
 
     def invoker = new DefaultTransformerInvocationFactory(
