@@ -90,12 +90,13 @@ class DependenciesSourceGeneratorTest extends Specification {
         sources.hasDependencyAlias(name, method)
 
         where:
-        name          | method
-        'groovy'      | 'getGroovy'
-        'groovy-json' | 'getGroovyJson'
-        'groovy.json' | 'getGroovyJson'
-        'groovyJson'  | 'getGroovyJson'
-        'lang3'       | 'getLang3'
+        name                  | method
+        'groovy'              | 'getGroovy'
+        'groovy-json'         | 'getJson'
+        'groovy.json'         | 'getJson'
+        'groovyJson'          | 'getGroovyJson'
+        'lang3'               | 'getLang3'
+        'kotlinx.awesome.lib' | 'getLib'
     }
 
     @Unroll
